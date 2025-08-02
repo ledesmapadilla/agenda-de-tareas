@@ -2,19 +2,25 @@ export default class Tarea {
   /* propiedades */
   #id;
   #tarea;
-  #fechaHora;
+  #fecha;
   #estado;
+  #responsable;
+  #urgencia;
 
   constructor(
     /* parametros */
     tarea,
-    fechaHora,
-    estado
+    fecha,
+    estado,
+    responsable,
+    urgencia
   ) {
     this.#id = crypto.randomUUID();
     this.#tarea = tarea;
-    this.#fechaHora = fechaHora;
-    this.#estado = estado;
+    this.#fecha = fecha;
+    this.#estado = `creada`;
+    this.#responsable = responsable;
+    this.#urgencia = urgencia;
   }
 
   // Getters
@@ -26,12 +32,18 @@ export default class Tarea {
     return this.#tarea;
   }
 
-  get fechaHora() {
-    return this.#fechaHora;
+  get fecha() {
+    return this.#fecha;
   }
 
   get estado() {
     return this.#estado;
+  }
+  get responsable() {
+    return this.#responsable;
+  }
+  get urgencia() {
+    return this.#urgencia;
   }
 
   // Setters
@@ -43,12 +55,18 @@ export default class Tarea {
     this.#tarea = nuevaTarea;
   }
 
-  set fechaHora(nuevaFechaHora) {
-    this.#fechaHora = nuevaFechaHora;
+  set fecha(nuevaFecha) {
+    this.#fecha = nuevaFecha;
   }
 
   set estado(nuevoEstado) {
     this.#estado = nuevoEstado;
+  }
+  set responsable(nuevoResponsable) {
+    this.#responsable = nuevoResponsable;
+  }
+  set urgencia(nuevoUrgencia) {
+    this.#urgencia = nuevoUrgencia;
   }
 
   //    metodo para almacenar el objeto en el localstorage/sessionstorage
@@ -56,8 +74,10 @@ export default class Tarea {
     return {
       id: this.id,
       tarea: this.tarea,
-      fechaHora: this.fechaHora,
+      fecha: this.fecha,
       estado: this.estado,
+      responsable: this.responsable,
+      urgencia: this.#urgencia,
     };
   }
 }
