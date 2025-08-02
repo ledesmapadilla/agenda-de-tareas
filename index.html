@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+    />
+    <link rel="stylesheet" href="./Css/style.css" />
+    <title>Gestor de Tareas</title>
+  </head>
+  <body>
+    <header>
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container">
+          <a class="navbar-brand" href="index.html">TAREAS</a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link disabled" aria-disabled="true"></a>
+              </li>
+            </ul>
+            <form class="d-flex" role="search">
+              <div class="input-group">
+                <span class="input-group-text"
+                  ><i class="bi bi-search"></i
+                ></span>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Buscar"
+                  aria-label="buscar"
+                />
+              </div>
+            </form>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main class="container my-4">
+      <section class="" id="seccionTablaTareas">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h1 class="mb-0">Listado de tareas</h1>
+          <!-- boton agregar tarea -->
+          <button type="button" class="btn btn-danger" id="btnAgregarTarea">
+            <i class="bi bi-pc-display-horizontal"></i> Agregar Tarea
+          </button>
+        </div>
+        <!-- tabla de datos -->
+        <div class="table-responsive">
+          <table class="table table-striped table-hover" id="tablaTarea">
+            <thead>
+              <tr>
+                <th scope="col">Tarea</th>
+                <th scope="col">Fecha creación</th>
+                <th scope="col">Hora de creacion</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <!-- cuerpo de la tabla -->
+           <!--  <tbody id="tablaTareasBody">
+              <td>cocinar</td>
+              <td></td>
+              <td></td>
+              <td>
+                <button type="button" class="btn btn-primary me-1 btn-eliminar">
+                  Eliminar
+                </button>
+                <button type="button" class="btn btn-success me-1 btn-editar">
+                  Editar
+                </button>
+                <button type="button" class="btn btn-secondary btn-finalizar">
+                  Finalizar
+                </button>
+              </td>
+            </tbody> -->
+          </table>
+        </div>
+      </section>
+      <!-- detalle de tareas -->
+      <section class="d-none" id="seccionDetalleTarea">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="index.html" id="breadCrumbContacts">Listado de tareas</a>
+            </li>
+            <li
+              class="breadcrumb-item active"
+              aria-current="page"
+              id="breadCrumbContactName"
+            >
+              cocinar
+            </li>
+          </ol>
+        </nav>
+        <article class="card mb-3">
+          <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+              <div>
+                <h2 class="card-title mb-0" id="detalleTarea">Cocinar</h2>
+              </div>
+            </div>
+            <hr />
+
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                Descripción de la tarea:
+                <span id="detalleDescripcion"> preparar las ollas</span>
+              </li>
+              <li class="list-group-item">
+                Responsable de la tarea:
+                <span id="detalleEmailInfo">Ignacio</span>
+              </li>
+              <li class="list-group-item">
+                Estado:
+                <span id="detalleEmailInfo">En curso</span>
+              </li>
+              <li class="list-group-item">
+                Fecha de creación:
+                <span id="detalleCompany">19-12-25</span>
+              
+              </li>
+            </ul>
+            <h5 class="mt-4">Notas</h5>
+            <p id="detalleNotes">.</p>
+          </div>
+        </article>
+        <button class="btn btn-secondary mt-3" id="btnVolverLista">
+          <i class="bi bi-arrow-left-short"></i> Volver a la Lista
+        </button>
+      </section>
+      <!-- modal tareas -->
+      <div
+        class="modal fade"
+        id="tareaModal"
+        tabindex="-1"
+        aria-labelledby="tareaModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="tareaModalLabel">Agregar Tarea</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <!-- formulario del modal -->
+            <div class="modal-body">
+              <form id="formTarea" novalidate>
+                <input type="hidden" id="tareaId" />
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="tarea" class="form-label">Tarea</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="tarea"
+                        required
+                        minlength="3"
+                      />
+                      <div class="invalid-feedback">
+                        Por favor ingresa un nombre válido (mínimo 3
+                        caracteres).
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="fechaCrea" class="form-label"
+                        >Fecha de creación</label
+                      >
+                      <input
+                        type="date"
+                        class="form-control"
+                        id="fechaCrea"
+                        required
+                        minlength="3"
+                      />
+                      <div class="invalid-feedback">
+                        Por favor ingresa una fecha válida
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="horaCrea" class="form-label">Hora</label>
+                      <input
+                        type="time"
+                        class="form-control"
+                        id="horaCrea"
+                        required
+                      />
+                      <div class="invalid-feedback">
+                        Por favor ingresa una hora válida
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="estado" class="form-label">Estado</label>
+                      <select
+                        name="estado"
+                        class="form-control"
+                        id="estado"
+                        required
+                      >
+                        <option value="creado">Creado</option>
+                        <option value="en proceso">En proceso</option>
+                        <option value="terminado">Terminado</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                  Guardar Tarea
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer class="bg-dark-subtle text-center py-4">
+      <p>&copy;Todos los derechos reservados</p>
+      <p>Dev.: Ignacio LP</p>
+    </footer>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+      crossorigin="anonymous"
+    ></script>
+    <script src="./JS/app.js" type="module"></script>
+  </body>
+</html>
