@@ -6,7 +6,7 @@ En este repositorio vamos a crear una agenda, donde se le ingresen distintos dat
 
 # 🎇 Demo del proyecto.
 
-Para poder ver el proyecto, entrá 👉 [Aqui] 
+Para poder ver el proyecto, entrá 👉 [Aqui] https://agendadetareas-ignaciolp.netlify.app/
 
 # 💡Tecnologias utilizadas:
 
