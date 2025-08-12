@@ -1,4 +1,5 @@
 import Tarea from "./tarea.js";
+import { validarCantidadCaracteres } from "./validaciones.js";
 // elementos del DOM
 const btnAgregarTarea = document.getElementById("btnAgregarTarea");
 const modalFormularioTarea = new bootstrap.Modal(
@@ -48,63 +49,77 @@ const guardarLocalstorage = () => {
 
 const crearTarea = () => {
   //buscar los datos del formulario y crear un objeto tarea
-  const tareaNueva = new Tarea(
-    inputTarea.value,
-    `original`,
-    inputResponsable.value,
-    inputUrgencia.value,
-    fechaFormateada,
-    null
-  );
-  //guardar el contacto en la agenda de tareas
-  agenda.push(tareaNueva);
 
-  console.log(tareaNueva);
+  if (validacion()) {
+    const tareaNueva = new Tarea(
+      inputTarea.value,
+      `original`,
+      inputResponsable.value,
+      inputUrgencia.value,
+      fechaFormateada,
+      null
+    );
 
-  Swal.fire({
-    title: "Has creado una tarea",
-    icon: "success",
-    confirmButtonText: "OK",
-  });
+    //guardar el contacto en la agenda de tareas
+    agenda.push(tareaNueva);
 
-  /* dibujar la tarea en la tabla */
-  dibujarFila(tareaNueva, agenda.length);
+    console.log(tareaNueva);
 
-  //guardar la agenda en el localstorage
-  guardarLocalstorage();
+    Swal.fire({
+      title: "Has creado una tarea",
+      icon: "success",
+      confirmButtonText: "OK",
+    });
+
+    /* dibujar la tarea en la tabla */
+    dibujarFila(tareaNueva, agenda.length);
+
+    //guardar la agenda en el localstorage
+    guardarLocalstorage();
+    limpiarValidaciones();
+    limpiarFormulario();
+  } else {
+    Swal.fire({
+      icon: "error",
+      title: "La tarea no pudo ser creada",
+      text: "Revisa tus datos!",
+    });
+    modalFormularioTarea.show();
+  }
 };
 
 const editarTarea = () => {
-  const indiceTarea = agenda.findIndex((tarea) => tarea.id == idTarea);
-  /* creo fecha de edicion */
+  if (validacion()) {
+    const indiceTarea = agenda.findIndex((tarea) => tarea.id == idTarea);
+    /* creo fecha de edicion */
 
-  const fechaEditada = new Date();
-  const opcionesFechaEditada = {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  };
+    const fechaEditada = new Date();
+    const opcionesFechaEditada = {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    };
 
-  const fechaFormateadaEditada = fechaEditada.toLocaleDateString(
-    undefined,
-    opcionesFechaEditada
-  );
+    const fechaFormateadaEditada = fechaEditada.toLocaleDateString(
+      undefined,
+      opcionesFechaEditada
+    );
 
-  /* modifico la tarea */
-  agenda[indiceTarea].tarea = inputTarea.value;
-  agenda[indiceTarea].responsable = inputResponsable.value;
-  agenda[indiceTarea].urgencia = inputUrgencia.value;
-  agenda[indiceTarea].estado = `Editada`;
-  agenda[indiceTarea].fechaEdicion = fechaFormateadaEditada;
+    /* modifico la tarea */
+    agenda[indiceTarea].tarea = inputTarea.value;
+    agenda[indiceTarea].responsable = inputResponsable.value;
+    agenda[indiceTarea].urgencia = inputUrgencia.value;
+    agenda[indiceTarea].estado = `Editada`;
+    agenda[indiceTarea].fechaEdicion = fechaFormateadaEditada;
 
-  /* corrijo en pantalla los cambios */
+    /* corrijo en pantalla los cambios */
 
-  const filaNueva = tbody.children[indiceTarea];
-  filaNueva.innerHTML = `
+    const filaNueva = tbody.children[indiceTarea];
+    filaNueva.innerHTML = `
     <td>${agenda[indiceTarea].tarea}</td>
     <td>${agenda[indiceTarea].responsable}</td>
     <td>${agenda[indiceTarea].urgencia}</td>
@@ -130,8 +145,16 @@ const editarTarea = () => {
       </button>
     </td>`;
 
-  guardarLocalstorage();
-  modalFormularioTarea.hide();
+    guardarLocalstorage();
+    modalFormularioTarea.hide();
+  } else {
+    Swal.fire({
+      icon: "error",
+      title: "La tarea no pudo ser creada",
+      text: "Revisa tus datos!",
+    });
+    modalFormularioTarea.show();
+  }
 };
 
 function limpiarFormulario() {
@@ -168,17 +191,17 @@ const dibujarFila = (itemTarea) => {
                       itemTarea.id
                     }')"
                   >
-                    Eliminar
+                    <i class="bi bi-trash"></i> Eliminar
                   </button>
                   <button type="button" class="btn btn-success me-1 btn-editar"onclick= "prepararTarea('${
                     itemTarea.id
                   }')">
-                    Editar
+                    <i class="bi bi-pen"></i> Editar
                   </button>
                   <button type="button" class="btn btn-secondary btn-finalizar" onclick="verTarea('${
                     itemTarea.id
                   }')">
-                    Ver más
+                    <i class="bi bi-eye"></i> Ver más
                   </button>
                 </td>
               </tr>`;
@@ -220,6 +243,12 @@ window.borrarTarea = (id) => {
   });
 };
 
+/* borrar formatos de las validaciones */
+const limpiarValidaciones = () => {
+  inputTarea.classList.remove(`is-valid`, `is-invalid`);
+  inputResponsable.classList.remove(`is-valid`, `is-invalid`);
+};
+
 /* para editar una tarea */
 /* 1- traigo los elementos al formulario */
 /* encuentro el objeto */
@@ -246,7 +275,8 @@ window.verTarea = (id) => {
   detalleDescripcion.textContent = tarea.tarea;
   detalleResponsable.textContent = tarea.responsable;
   detalleEstado.textContent = tarea.estado;
-  detalleFechaEdit.textContent = tarea.fechaEdicion ?? "Sin editar";/* ??= "sino" */
+  detalleFechaEdit.textContent =
+    tarea.fechaEdicion ?? "Sin editar"; /* ??= "sino" */
   detalleFechaCrea.textContent = tarea.fechaCrea;
 };
 
@@ -275,8 +305,21 @@ formularioTarea.addEventListener("submit", (e) => {
     idTarea = null;
   }
 
-  formularioTarea.reset();
-  modalFormularioTarea.hide();
+  /* formularioTarea.reset(); */
+  /* modalFormularioTarea.hide(); */
 });
+
+// validacion de tareas
+const validacion = () => {
+  let datosValidos = true;
+
+  if (!validarCantidadCaracteres(inputTarea, 3, 50)) {
+    datosValidos = false;
+  }
+  if (!validarCantidadCaracteres(inputResponsable, 3, 50)) {
+    datosValidos = false;
+  }
+  return datosValidos;
+};
 
 cargarTarea();

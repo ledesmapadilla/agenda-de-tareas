@@ -26,7 +26,7 @@ export default class Tarea {
     this.#fechaEdicion = fechaEdicion;
   }
 
-  // Getters
+  // Getters y setters
   get id() {
     return this.#id;
   }
@@ -52,7 +52,7 @@ export default class Tarea {
     return this.#fechaCrea;
   }
 
-  // Setters
+  
   set id(nuevoId) {
     this.#id = nuevoId;
   }
